@@ -1,4 +1,4 @@
-import { type ResultSetHeader } from "mysql2";
+import { type ResultSetHeader, type RowDataPacket } from "mysql2";
 import { db } from "../../database/connection.js";
 
 export async function criarInstituicaoRepository(nome: string){
@@ -21,12 +21,12 @@ export async function deletarInstituicaoRepository(id: number) {
 
 export async function buscarInstituicaoRepository(id: number) {
     const sql = "select * from instituicao where id = ?";
-    const [resultado] = await db.execute<ResultSetHeader>(sql, [id]);
-    return resultado.affectedRows;
+    const [resultado] = await db.execute<RowDataPacket[]>(sql, [id]);
+    return resultado[0];
 }
 
 export async function listarInstituicaoRepository() {
     const sql = "select * from instituicao";
-    const [resultado] = await db.execute<ResultSetHeader>(sql);
+    const [resultado] = await db.execute<RowDataPacket[]>(sql);
     return resultado
 }
