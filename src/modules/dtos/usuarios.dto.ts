@@ -1,4 +1,4 @@
-export type Tipo = "SuperAdmin" | "responsavel" | "aluno" | "visitante";
+export type Tipo = "superAdmin" | "responsavel" | "aluno" | "visitante";
 
 export interface UsuarioDto {
     readonly id: number;
