@@ -15,7 +15,7 @@ export async function gerarTabelas() {
             nome varchar(255) not null,
             email varchar(255) not null unique,
             senha varchar(255) not null,
-            tipo enum("superAdmin", "aluno", "visitante") NOT NULL default "visitante",
+            tipo enum("superAdmin", "responsavel", "aluno", "visitante") NOT NULL default "visitante",
             instituicao_id int null,
             identificacao varchar(255) null,
             curso varchar(255) null,
