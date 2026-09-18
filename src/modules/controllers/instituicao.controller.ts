@@ -1,3 +1,4 @@
+import { buscarInstituicaoRepository } from "../repositories/instituicao.repository.js";
 import {
     criarInstituicaoService,
     alterarInstituicaoService,
@@ -14,9 +15,11 @@ export async function criarInstituicaoController(req: Request, res: Response) {
         const {nome} = req.body;
         const id = await criarInstituicaoService(nome);
 
+        const dados = await buscarInstituicaoRepository(id);
+
         res.status(201).json({
             mensagem: "Instituição criada com sucesso!",
-            id: id
+            dados: dados
         })
 
     } catch (error) {
@@ -41,11 +44,12 @@ export async function alterarInstituicaoController(req: Request, res: Response) 
 
         const {nome} = req.body;
         const id = Number(req.params.id);
-        const nomeAlterado = await alterarInstituicaoService(nome, id);
+        const idAlterado = await alterarInstituicaoService(nome, id);
 
         res.status(200).json({
             mensagem: "Nome da instituição alterado com sucesso!",
-            id: nomeAlterado
+            id: idAlterado,
+            nome: nome
         })
 
     } catch (error) {
@@ -69,11 +73,12 @@ export async function deletarInstituicaoController(req: Request, res: Response) 
     try {
 
         const id = Number(req.params.id);
-        const instituicao = await deletarInstituicaoService(id);
+        const dados = await buscarInstituicaoRepository(id);
+        await deletarInstituicaoService(id);
 
         res.status(200).json({
             mensagem: "Instituição deletada com sucesso!",
-            dados: instituicao
+            dados: dados
         })
 
     } catch (error) {

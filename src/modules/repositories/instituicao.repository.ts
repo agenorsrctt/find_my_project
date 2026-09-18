@@ -2,31 +2,31 @@ import { type ResultSetHeader, type RowDataPacket } from "mysql2";
 import { db } from "../../database/connection.js";
 
 export async function criarInstituicaoRepository(nome: string){
-    const sql = "insert into instituicao (nome) values (?)";
+    const sql = "insert into instituicoes (nome) values (?)";
     const [resultado] = await db.execute<ResultSetHeader>(sql, [nome]);
     return resultado.insertId;
 };
 
 export async function alterarInstituicaoRepository(nome: string, id: number) {
-    const sql = "update instituicao (nome) set nome = ? where id = ?";
-    const [resultado] = await db.execute<ResultSetHeader>(sql, [nome]);
+    const sql = "update instituicoes set nome = ? where id = ?";
+    const [resultado] = await db.execute<ResultSetHeader>(sql, [nome, id]);
     return resultado.affectedRows;
 };
 
 export async function deletarInstituicaoRepository(id: number) {
-    const sql = "delete from instituicao where id = ?";
+    const sql = "delete from instituicoes where id = ?";
     const [resultado] = await db.execute<ResultSetHeader>(sql, [id]);
     return resultado.affectedRows;
 }
 
 export async function buscarInstituicaoRepository(id: number) {
-    const sql = "select * from instituicao where id = ?";
+    const sql = "select * from instituicoes where id = ?";
     const [resultado] = await db.execute<RowDataPacket[]>(sql, [id]);
     return resultado[0];
 }
 
 export async function listarInstituicaoRepository() {
-    const sql = "select * from instituicao";
+    const sql = "select * from instituicoes";
     const [resultado] = await db.execute<RowDataPacket[]>(sql);
     return resultado
 }
