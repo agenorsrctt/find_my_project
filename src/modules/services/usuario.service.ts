@@ -5,10 +5,16 @@ import {
     alterarUsuarioRepository,
     deletarUsuarioRepository,
     buscarUsuarioRepository,
-    listarUsuarioRepository
-} from "../repositories/usuarios.repository.js"
+    listarUsuarioRepository,
+    listarAlunoRepository,
+    buscarAlunoRepository
+} from "../repositories/usuario.repository.js"
 
 export async function criarUsuarioService(dados: UsuarioDto) {
+
+    if (!dados) {
+        throw new Error("Dados não enviados, verifique as informações e tente novamente.");
+    }
 
     const camposObrigatorios: (string | number | undefined)[] = [dados.nome, dados.email, dados.senha, dados.tipo];
 
@@ -22,10 +28,40 @@ export async function criarUsuarioService(dados: UsuarioDto) {
         };
     };
 
-    return criarUsuarioRepository(dados);
+    if (camposObrigatorios.length <= 0) {
+        throw new Error("Dados inválido, verifique as informações e tente novamente.");
+    }
+
+    dados.nome = dados.nome.toLowerCase();
+
+    if(dados.curso){
+        dados.curso = dados.curso.toLowerCase();
+    }
+
+    const usuario = await criarUsuarioRepository(dados);
+
+    if (!usuario) {
+        throw new Error("Usuario não criado, verifique as informações e tente novamente.");
+    }
+
+    return usuario;
 }
 
 export async function alterarUsuarioService(dados: AlterarUsuarioDto, id: number) {
+
+    if (!id) {
+        throw new Error("Identificação não enviada, verifique as informações e tente novamente.")
+    }
+
+    if (!dados) {
+        throw new Error("Alterações não enviadas, verifique as informações e tente novamente.")
+    }
+
+    const usuario = await buscarUsuarioRepository(id);
+
+    if (!usuario) {
+        throw new Error("Usuario não encontrado, verifique as informações e tente novamente.")
+    }
 
     if (dados.nome !== undefined) {
         if (!dados.nome.trim().replace(/\s+/g, " ")) {
@@ -108,11 +144,11 @@ export async function alterarUsuarioService(dados: AlterarUsuarioDto, id: number
         };
     };
 
-    if(dados.identificacao !== undefined && !dados.identificacao) {
+    if (dados.identificacao !== undefined && !dados.identificacao) {
         throw new Error("Identificação inválida, verifique as informações e tente novamente.");
     };
 
-    if(dados.curso !== undefined){
+    if (dados.curso !== undefined) {
         if (!dados.curso.trim().replace(/\s+/g, " ")) {
             throw new Error("Curso precisa ser preenchido, verifique as informações e tente novamente.");
         };
@@ -126,5 +162,84 @@ export async function alterarUsuarioService(dados: AlterarUsuarioDto, id: number
         }
 
     }
+
+    if(dados.nome){
+        dados.nome = dados.nome.toLowerCase();
+    }
+
+    if(dados.curso){
+        dados.curso = dados.curso.toLowerCase();
+    }
+
+    await alterarUsuarioRepository(dados, id);
 };
 
+export async function deletarUsuarioService(id: number) {
+    if (!id) {
+        throw new Error("Usuário não identificado, verifique as informações e tente novamente.")
+    }
+
+    const usuario = await buscarUsuarioRepository(id);
+
+    if (!usuario) {
+        throw new Error("Usuario não localizado, verifique as informações e tente novamente.")
+    }
+
+    return await deletarUsuarioRepository(id);
+}
+
+export async function buscarUsuarioService(id: number) {
+    if (!id || id <= 0) {
+        throw new Error("Usuário não identificado, verifique as informações e tente novamente.")
+    }
+
+    const usuario = await buscarUsuarioRepository(id);
+
+    if(!usuario) {
+        throw new Error("Usuario não encontrado, verifique as informações e tente novamente.")
+    }
+
+    return usuario;
+}
+
+export async function listarUsuarioService() {
+    const usuarios = await listarUsuarioRepository();
+
+    if (!usuarios) {
+        throw new Error("Nenhum usuario encontrado até o momento.")
+    }
+
+    if (usuarios.length <= 0) {
+        throw new Error("Nenhum usuario encontrado até o momento");
+    }
+
+    return usuarios;
+}
+
+export async function listarAlunoService() {
+    const usuarios = await listarAlunoRepository();
+
+    if (!usuarios) {
+        throw new Error("Nenhum usuario encontrado até o momento.")
+    }
+
+    if (usuarios.length <= 0) {
+        throw new Error("Nenhum usuario encontrado até o momento");
+    }
+
+    return usuarios;
+}
+
+export async function buscarAlunoService(id: number) {
+    if (!id || id <= 0) {
+        throw new Error("Usuário não identificado, verifique as informações e tente novamente.")
+    }
+
+    const usuario = await buscarAlunoRepository(id);
+
+    if(!usuario) {
+        throw new Error("Usuario não encontrado, verifique as informações e tente novamente.")
+    }
+
+    return usuario;
+}

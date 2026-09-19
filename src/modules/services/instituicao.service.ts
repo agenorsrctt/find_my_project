@@ -14,6 +14,8 @@ export async function criarInstituicaoService(nome: string) {
         throw new Error("Nome inválido, verifique as informações e tente novamente.")
     }
 
+    nome = nome.toUpperCase();
+
     return await criarInstituicaoRepository(nome);
 
 }
