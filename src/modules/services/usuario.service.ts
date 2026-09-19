@@ -1,3 +1,4 @@
+import { gerarHashSenha } from "../../middleware/bcrypt.js";
 import type { AlterarUsuarioDto, UsuarioDto } from "../dtos/usuarios.dto.js";
 import { buscarInstituicaoRepository } from "../repositories/instituicao.repository.js";
 import {
@@ -34,9 +35,12 @@ export async function criarUsuarioService(dados: UsuarioDto) {
 
     dados.nome = dados.nome.toLowerCase();
 
-    if(dados.curso){
+    if (dados.curso) {
         dados.curso = dados.curso.toLowerCase();
     }
+
+    const senhaHash = await gerarHashSenha(dados.senha);
+    dados.senha = senhaHash;
 
     const usuario = await criarUsuarioRepository(dados);
 
@@ -163,13 +167,19 @@ export async function alterarUsuarioService(dados: AlterarUsuarioDto, id: number
 
     }
 
-    if(dados.nome){
+    if (dados.nome) {
         dados.nome = dados.nome.toLowerCase();
     }
 
-    if(dados.curso){
+    if (dados.curso) {
         dados.curso = dados.curso.toLowerCase();
     }
+
+    if (dados.senha) {
+        const senhaHash = await gerarHashSenha(dados.senha);
+        dados.senha = senhaHash;
+    }
+
 
     await alterarUsuarioRepository(dados, id);
 };
@@ -195,7 +205,7 @@ export async function buscarUsuarioService(id: number) {
 
     const usuario = await buscarUsuarioRepository(id);
 
-    if(!usuario) {
+    if (!usuario) {
         throw new Error("Usuario não encontrado, verifique as informações e tente novamente.")
     }
 
@@ -237,7 +247,7 @@ export async function buscarAlunoService(id: number) {
 
     const usuario = await buscarAlunoRepository(id);
 
-    if(!usuario) {
+    if (!usuario) {
         throw new Error("Usuario não encontrado, verifique as informações e tente novamente.")
     }
 

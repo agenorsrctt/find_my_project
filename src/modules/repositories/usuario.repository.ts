@@ -73,7 +73,7 @@ export async function deletarUsuarioRepository(id: number) {
     const sql = "delete from usuarios where id = ?";
     const [resultado] = await db.execute<ResultSetHeader>(sql, [id]);
     return resultado.affectedRows;
-}
+};
 
 export async function buscarUsuarioRepository(id: number) {
     const sql = `
@@ -85,7 +85,7 @@ export async function buscarUsuarioRepository(id: number) {
 
     const [resultado] = await db.execute<RowDataPacket[]>(sql, [id]);
     return resultado[0];
-}
+};
 
 export async function listarUsuarioRepository() {
     const sql = `
@@ -95,7 +95,7 @@ export async function listarUsuarioRepository() {
     `;
     const [resultado] = await db.execute<RowDataPacket[]>(sql);
     return resultado
-}
+};
 
 export async function listarAlunoRepository() {
 
@@ -108,7 +108,7 @@ export async function listarAlunoRepository() {
     `;
     const [resultado] = await db.execute<RowDataPacket[]>(sql);
     return resultado
-}
+};
 
 export async function buscarAlunoRepository(id: number) {
     const sql = `
@@ -122,4 +122,4 @@ export async function buscarAlunoRepository(id: number) {
 
     const [resultado] = await db.execute<RowDataPacket[]>(sql, [id]);
     return resultado[0];
-}
+};
