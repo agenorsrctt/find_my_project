@@ -84,7 +84,7 @@ export async function alterarProjetoService(dados: AltearProjetosDTO, id: number
 }
 
 
-export async function deltarProjetoService(id: number) {
+export async function deletarProjetoService(id: number) {
     if (!Number.isInteger(id) || id <= 0) {
         throw new Error("Projeto não encontrado, verifique as informações e tente novamente.");
     }

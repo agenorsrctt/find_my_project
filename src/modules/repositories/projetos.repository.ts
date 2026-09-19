@@ -84,14 +84,29 @@ export async function deletarProjetoRepository(id: number) {
 }
 
 export async function buscarProjetoRepository(id: number) {
-    const sql = "select * from projetos where id = ?";
+    const sql = `select
+    p.id, p.responsavel_id, u.nome as criador, p.instituicao_id, i.nome as instituicao, p.nome as projeto, p.descricao, p.data, p.tecnologias, p.integrantes, p.gitHub_url, p.img_capa_url
+    from projetos p
+    inner join usuarios u
+    on u.id = p.responsavel_id
+    inner join instituicoes i
+    on i.id = p.instituicao_id
+    where p.id = ?
+    `;
     
     const [resultado] = await db.execute<RowDataPacket[]>(sql, [id]);
     return resultado[0];
 }
 
 export async function listarProjetoRepository() {
-    const sql = "select * from projetos";
+    const sql = `select
+    p.id, p.responsavel_id, u.nome as criador, p.instituicao_id, i.nome as instituicao, p.nome as projeto, p.descricao, p.data, p.tecnologias, p.integrantes, p.gitHub_url, p.img_capa_url
+    from projetos p
+    inner join usuarios u
+    on u.id = p.responsavel_id
+    inner join instituicoes i
+    on i.id = p.instituicao_id
+    `;
     
     const [resultado] = await db.execute<RowDataPacket[]>(sql);
     return resultado
