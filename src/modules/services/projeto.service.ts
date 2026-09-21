@@ -14,6 +14,11 @@ export async function criarProjetoService(dados: ProjetosDTO) {
         throw new Error("Dados do projeto não enviados, verifique as informações e tente novamente.");
     }
 
+    const responsavel = await buscarAlunoRepository(dados.responsavel_id);
+    if(responsavel && responsavel.tipo !== "responsavel"){
+        throw new Error("Você não tem permissão para criar, verifique as informações e tente novamente.");
+    }
+
     const camposObrigatorios = {
         responsavel_id: dados.responsavel_id,
         instituicao_id: dados.instituicao_id,
@@ -54,6 +59,10 @@ export async function alterarProjetoService(dados: AltearProjetosDTO, id: number
     if (!dados) {
         throw new Error("Dados do projeto não enviados, verifique as informações e tente novamente.");
     };
+
+    if(dados.responsavel_id !== projeto.responvsavel_id){
+        throw new Error("Você não tem autorização sobre este projeto, verifique as informações e tente novamente.")
+    }
 
     const campos = {
         descricao: dados.descricao,
@@ -104,6 +113,10 @@ export async function deletarProjetoService(id: number, responsavel_id: number) 
 
     if (!projeto) {
         throw new Error("Projeto não encontrado, verifique as informações e tente novamente.")
+    }
+
+    if(projeto.resposavel_id !== responsavel_id){
+        throw new Error("Você não tem autorização sobre este projeto, verifique as informações e tente novamente.")
     }
 
     return await deletarProjetoRepository(id);

@@ -13,7 +13,8 @@ export async function criarInstituicaoController(req: Request, res: Response) {
     try {
 
         const {nome} = req.body;
-        const id = await criarInstituicaoService(nome);
+        const tipo = req.body.usuario.tipo;
+        const id = await criarInstituicaoService(nome, tipo);
 
         const dados = await buscarInstituicaoRepository(id);
 

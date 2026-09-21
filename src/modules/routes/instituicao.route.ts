@@ -1,4 +1,4 @@
-import { autenticacao } from "../../middleware/autenticacao.middleware.js";
+import { autenticacao, autorizacaoSuperAdmin } from "../../middleware/autenticacao.middleware.js";
 import {
     criarInstituicaoController,
     alterarInstituicaoController,
@@ -12,8 +12,8 @@ const instituicaoRouter = express.Router();
 
 instituicaoRouter.get("/", listarInstituicaoController);
 instituicaoRouter.get("/:id", buscarInstituicaoController);
-instituicaoRouter.post("/", autenticacao, criarInstituicaoController);
-instituicaoRouter.put("/:id", autenticacao, alterarInstituicaoController);
-instituicaoRouter.delete("/:id", autenticacao, deletarInstituicaoController);
+instituicaoRouter.post("/", autenticacao, autorizacaoSuperAdmin, criarInstituicaoController);
+instituicaoRouter.put("/:id", autenticacao, autorizacaoSuperAdmin, alterarInstituicaoController);
+instituicaoRouter.delete("/:id", autenticacao, autorizacaoSuperAdmin, deletarInstituicaoController);
 
 export default instituicaoRouter;

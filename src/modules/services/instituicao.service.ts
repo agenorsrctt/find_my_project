@@ -8,10 +8,14 @@ import {
 
 
 
-export async function criarInstituicaoService(nome: string) {
+export async function criarInstituicaoService(nome: string, tipo: string) {
 
     if(!nome.trim()){
         throw new Error("Nome inválido, verifique as informações e tente novamente.")
+    }
+
+    if(tipo !== "superAdmin"){
+        throw new Error("Você não tem permissão, entre em contato com o admistrador para mais informações.")
     }
 
     nome = nome.toUpperCase();
