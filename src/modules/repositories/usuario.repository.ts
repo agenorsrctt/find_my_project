@@ -123,3 +123,9 @@ export async function buscarAlunoRepository(id: number) {
     const [resultado] = await db.execute<RowDataPacket[]>(sql, [id]);
     return resultado[0];
 };
+
+export async function buscarEmailAlunoRepository(email: string) {
+    const sql = "select id, email, senha from usuarios where email = ?";
+    const [resultado] = await db.execute<RowDataPacket[]>(sql, [email]);
+    return resultado[0];
+}

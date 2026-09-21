@@ -1,3 +1,4 @@
+import { autenticacao } from "../../middleware/autenticacao.middleware.js";
 import {
     criarInstituicaoController,
     alterarInstituicaoController,
@@ -11,7 +12,7 @@ const instituicaoRouter = express.Router();
 
 instituicaoRouter.get("/", listarInstituicaoController);
 instituicaoRouter.get("/:id", buscarInstituicaoController);
-instituicaoRouter.post("/", criarInstituicaoController);
+instituicaoRouter.post("/", autenticacao , criarInstituicaoController);
 instituicaoRouter.put("/:id", alterarInstituicaoController);
 instituicaoRouter.delete("/:id", deletarInstituicaoController);
 

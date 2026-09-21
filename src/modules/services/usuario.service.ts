@@ -1,4 +1,4 @@
-import { gerarHashSenha } from "../../middleware/bcrypt.js";
+import { gerarHashSenha } from "../../middleware/bcrypt.middleware.js";
 import type { AlterarUsuarioDto, UsuarioDto } from "../dtos/usuarios.dto.js";
 import { buscarInstituicaoRepository } from "../repositories/instituicao.repository.js";
 import {
