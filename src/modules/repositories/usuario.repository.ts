@@ -78,7 +78,7 @@ export async function deletarUsuarioRepository(id: number) {
 export async function buscarUsuarioRepository(id: number) {
     const sql = `
         select 
-        id, nome, email, tipo
+        id, nome, email, tipo, instituicao_id, identificacao, curso
         from usuarios 
         where id = ?
     `;

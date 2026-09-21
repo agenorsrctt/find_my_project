@@ -55,9 +55,9 @@ export async function alterarProjetoController(req: Request, res: Response) {
             responsavel_id
         }
 
-        const idRetornado = await alterarProjetoService(dados, id);
+        await alterarProjetoService(dados, id);
 
-        const projeto = await buscarProjetoService(idRetornado);
+        const projeto = await buscarProjetoService(id);
 
         res.status(200).json({
             mensagem: "Projeto alterado com sucesso.",
