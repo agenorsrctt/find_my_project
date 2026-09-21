@@ -1,17 +1,22 @@
-import { 
-    criarInstituicaoRepository, 
-    alterarInstituicaoRepository, 
-    deletarInstituicaoRepository, 
-    buscarInstituicaoRepository, 
+import {
+    criarInstituicaoRepository,
+    alterarInstituicaoRepository,
+    deletarInstituicaoRepository,
+    buscarInstituicaoRepository,
     listarInstituicaoRepository
- } from "../repositories/instituicao.repository.js"
+} from "../repositories/instituicao.repository.js"
 
 
 
 export async function criarInstituicaoService(nome: string) {
 
-    if(!nome.trim()){
-        throw new Error("Nome inválido, verifique as informações e tente novamente.")
+    if (nome !== undefined) {
+        if (typeof nome !== "string") {
+            throw new Error("Nome inválido, verifique as informações e tente novamente.")
+        }
+        if (!nome.trim()) {
+            throw new Error("Nome inválido, verifique as informações e tente novamente.")
+        }
     }
 
     nome = nome.toUpperCase();
@@ -21,13 +26,18 @@ export async function criarInstituicaoService(nome: string) {
 
 export async function alterarInstituicaoService(nome: string, id: number) {
 
-    if(!nome.trim()){
-        throw new Error("Nome inválido, verifique as informações e tente novamente.")
+    if (nome !== undefined) {
+        if (typeof nome !== "string") {
+            throw new Error("Nome inválido, verifique as informações e tente novamente.")
+        }
+        if (!nome.trim()) {
+            throw new Error("Nome inválido, verifique as informações e tente novamente.")
+        }
     }
 
     const instituicao = await buscarInstituicaoRepository(id);
 
-    if(!instituicao) {
+    if (!instituicao) {
         throw new Error("Instituição não encontada, verifique as informações e tente novamente.")
     }
 
@@ -38,13 +48,13 @@ export async function alterarInstituicaoService(nome: string, id: number) {
 
 export async function deletarInstituicaoService(id: number) {
 
-    if(id <= 0){
+    if (id <= 0) {
         throw new Error("Instituição não encontrada, verifique as informações e tente novamente.")
     }
 
     const instituicao = await buscarInstituicaoRepository(id);
 
-    if(!instituicao) {
+    if (!instituicao) {
         throw new Error("Instituição não encontada, verifique as informações e tente novamente.")
     }
 
@@ -55,13 +65,13 @@ export async function deletarInstituicaoService(id: number) {
 
 export async function buscarInstituicaoService(id: number) {
 
-    if(id <= 0){
+    if (id <= 0) {
         throw new Error("Instituição não encontrada, verifique as informações e tente novamente.")
     }
 
     const instituicao = await buscarInstituicaoRepository(id);
 
-    if(!instituicao) {
+    if (!instituicao) {
         throw new Error("Instituição não encontada, verifique as informações e tente novamente.")
     }
 
@@ -73,7 +83,7 @@ export async function listarInstituicaoService() {
 
     const instituicoes = await listarInstituicaoRepository();
 
-    if(instituicoes.length <= 0) {
+    if (instituicoes.length <= 0) {
         throw new Error("Nenhuma instituição encontrada até o momento, verifique as informações e tente novamente.")
     }
 

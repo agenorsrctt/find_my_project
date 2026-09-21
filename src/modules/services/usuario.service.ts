@@ -24,7 +24,7 @@ export async function criarUsuarioService(dados: UsuarioDto) {
 }
 
 export async function alterarUsuarioService(dados: AlterarUsuarioDto, id: number) {
-    if (Number.isInteger(id) || id <= 0) {
+    if (!Number.isInteger(id) || id <= 0) {
         throw new Error("Usuario não identificado.")
     }
 
