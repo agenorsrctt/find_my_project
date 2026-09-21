@@ -13,7 +13,7 @@ import type { Request, Response } from "express"
 
 export async function criarUsuarioController(req: Request, res: Response) {
     try {
-        
+
         const dados: UsuarioDto = req.body;
         const idCriado = await criarUsuarioService(dados);
         const usuario = await buscarUsuarioService(idCriado);
@@ -25,7 +25,7 @@ export async function criarUsuarioController(req: Request, res: Response) {
         })
 
     } catch (error) {
-        
+
         if (error instanceof Error) {
             return res.status(500).json({
                 mensagem: "Erro do servidor",
@@ -43,11 +43,17 @@ export async function criarUsuarioController(req: Request, res: Response) {
 
 export async function alterarUsuarioController(req: Request, res: Response) {
     try {
-        
+
         const dados: AlterarUsuarioDto = req.body;
-        const id = Number(req.params.id);
+        const idSolicitado = Number(req.params.id);
+        const id = res.locals.usuario.id
+        if (idSolicitado !== id) {
+            return res.status(403).json({
+                mensagem: "Você não tem permissão para alterar este usuário."
+            })
+        }
         const resultado = await alterarUsuarioService(dados, id);
-        
+
         res.status(200).json({
             mensagem: "Usuario alterado com sucesso!",
             dados: resultado
@@ -55,7 +61,7 @@ export async function alterarUsuarioController(req: Request, res: Response) {
 
 
     } catch (error) {
-        
+
         if (error instanceof Error) {
             return res.status(500).json({
                 mensagem: "Erro do servidor",
@@ -74,8 +80,14 @@ export async function alterarUsuarioController(req: Request, res: Response) {
 
 export async function deletarUsuarioController(req: Request, res: Response) {
     try {
-        
-        const id = Number(req.params.id);
+
+        const idSolicitado = Number(req.params.id);
+        const id = res.locals.usuario.id
+        if (idSolicitado !== id) {
+            return res.status(403).json({
+                mensagem: "Você não tem permissão para deletar este usuário."
+            })
+        }
         const usuario = await buscarUsuarioService(id);
         await deletarUsuarioService(id);
 
@@ -86,7 +98,7 @@ export async function deletarUsuarioController(req: Request, res: Response) {
 
 
     } catch (error) {
-        
+
         if (error instanceof Error) {
             return res.status(500).json({
                 mensagem: "Erro do servidor",
@@ -104,7 +116,7 @@ export async function deletarUsuarioController(req: Request, res: Response) {
 
 export async function buscarUsuarioController(req: Request, res: Response) {
     try {
-        
+
         const id = Number(req.params.id);
         const usuario = await buscarUsuarioService(id);
 
@@ -115,7 +127,7 @@ export async function buscarUsuarioController(req: Request, res: Response) {
 
 
     } catch (error) {
-        
+
         if (error instanceof Error) {
             return res.status(500).json({
                 mensagem: "Erro do servidor",
@@ -133,7 +145,7 @@ export async function buscarUsuarioController(req: Request, res: Response) {
 
 export async function listarUsuarioController(req: Request, res: Response) {
     try {
-        
+
         const usuarios = await listarUsuarioService();
 
         res.status(200).json({
@@ -143,7 +155,7 @@ export async function listarUsuarioController(req: Request, res: Response) {
 
 
     } catch (error) {
-        
+
         if (error instanceof Error) {
             return res.status(500).json({
                 mensagem: "Erro do servidor",
@@ -162,7 +174,7 @@ export async function listarUsuarioController(req: Request, res: Response) {
 
 export async function listarAlunoController(req: Request, res: Response) {
     try {
-        
+
         const usuarios = await listarAlunoService();
 
         res.status(200).json({
@@ -172,7 +184,7 @@ export async function listarAlunoController(req: Request, res: Response) {
 
 
     } catch (error) {
-        
+
         if (error instanceof Error) {
             return res.status(500).json({
                 mensagem: "Erro do servidor",
@@ -190,7 +202,7 @@ export async function listarAlunoController(req: Request, res: Response) {
 
 export async function buscarAlunoController(req: Request, res: Response) {
     try {
-        
+
         const id = Number(req.params.id);
         const usuario = await buscarAlunoService(id);
 
@@ -201,7 +213,7 @@ export async function buscarAlunoController(req: Request, res: Response) {
 
 
     } catch (error) {
-        
+
         if (error instanceof Error) {
             return res.status(500).json({
                 mensagem: "Erro do servidor",

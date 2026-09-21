@@ -6,13 +6,14 @@ import {
     buscarProjetoController,
     listarProjetosController
 } from "../controllers/projetos.controller.js";
+import { autenticacao } from '../../middleware/autenticacao.middleware.js';
 
 const projetoRouter = express.Router();
 
 projetoRouter.get("/:id", buscarProjetoController);
 projetoRouter.get("/", listarProjetosController);
-projetoRouter.post("/", criarProjetoController);
-projetoRouter.patch("/:id", alterarProjetoController);
-projetoRouter.delete("/:id", deletarProjetoController);
+projetoRouter.post("/", autenticacao, criarProjetoController);
+projetoRouter.patch("/:id", autenticacao, alterarProjetoController);
+projetoRouter.delete("/:id", autenticacao, deletarProjetoController);
 
 export default projetoRouter;

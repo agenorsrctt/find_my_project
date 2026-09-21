@@ -6,6 +6,7 @@ import {
     listarProjetoRepository
 } from "../repositories/projetos.repository.js";
 import type { ProjetosDTO, AltearProjetosDTO } from "../dtos/projetos.dto.js";
+import { buscarAlunoRepository } from "../repositories/usuario.repository.js";
 
 
 export async function criarProjetoService(dados: ProjetosDTO) {
@@ -84,9 +85,19 @@ export async function alterarProjetoService(dados: AltearProjetosDTO, id: number
 }
 
 
-export async function deletarProjetoService(id: number) {
+export async function deletarProjetoService(id: number, responsavel_id: number) {
     if (!Number.isInteger(id) || id <= 0) {
         throw new Error("Projeto não encontrado, verifique as informações e tente novamente.");
+    }
+
+    if (!Number.isInteger(responsavel_id) || responsavel_id <= 0) {
+        throw new Error("Usuario não encontrado, verifique as informações e tente novamente.");
+    }
+
+    const aluno = await buscarAlunoRepository(responsavel_id);
+
+    if (!aluno) {
+        throw new Error("Usuario autenticado não encontrado, verifique as informações e tente novamente.");
     }
 
     const projeto = await buscarProjetoRepository(id);

@@ -10,7 +10,14 @@ import {
 export async function criarProjetoController(req: Request, res: Response) {
     try {
 
-        const dados = req.body;
+        const requisicao = req.body;
+        const responsavel_id = res.locals.usuario.id;
+
+        const dados = {
+            ...requisicao,
+            responsavel_id
+        }
+
         const idCriado = await criarProjetoService(dados);
         const projeto = await buscarProjetoService(idCriado);
 
@@ -39,7 +46,14 @@ export async function alterarProjetoController(req: Request, res: Response) {
     try {
 
         const id = Number(req.params.id);
-        const dados = req.body;
+        const requisicao = req.body;
+
+        const responsavel_id = res.locals.usuario.id;
+
+        const dados = {
+            ...requisicao,
+            responsavel_id
+        }
 
         const idRetornado = await alterarProjetoService(dados, id);
 
@@ -70,8 +84,9 @@ export async function deletarProjetoController(req: Request, res: Response) {
     try {
 
         const id = Number(req.params.id);
+        const responsavel_id = res.locals.usuario.id;
         const projeto = await buscarProjetoService(id);
-        await deletarProjetoService(id);
+        await deletarProjetoService(id, responsavel_id);
 
         res.status(200).json({
             mensagem: "Projeto deletado com sucesso",

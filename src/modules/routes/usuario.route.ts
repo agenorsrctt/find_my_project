@@ -1,3 +1,4 @@
+import { autenticacao } from "../../middleware/autenticacao.middleware.js";
 import {
     criarUsuarioController,
     alterarUsuarioController,
@@ -16,7 +17,7 @@ usuarioRouter.get("/alunos/:id", buscarAlunoController);
 usuarioRouter.get("/:id", buscarUsuarioController);
 usuarioRouter.get("/", listarUsuarioController);
 usuarioRouter.post("/", criarUsuarioController);
-usuarioRouter.patch("/:id", alterarUsuarioController);
-usuarioRouter.delete("/:id", deletarUsuarioController);
+usuarioRouter.patch("/:id", autenticacao, alterarUsuarioController);
+usuarioRouter.delete("/:id", autenticacao, deletarUsuarioController);
 
 export default usuarioRouter;

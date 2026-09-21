@@ -12,8 +12,8 @@ const instituicaoRouter = express.Router();
 
 instituicaoRouter.get("/", listarInstituicaoController);
 instituicaoRouter.get("/:id", buscarInstituicaoController);
-instituicaoRouter.post("/", autenticacao , criarInstituicaoController);
-instituicaoRouter.put("/:id", alterarInstituicaoController);
-instituicaoRouter.delete("/:id", deletarInstituicaoController);
+instituicaoRouter.post("/", autenticacao, criarInstituicaoController);
+instituicaoRouter.put("/:id", autenticacao, alterarInstituicaoController);
+instituicaoRouter.delete("/:id", autenticacao, deletarInstituicaoController);
 
 export default instituicaoRouter;
