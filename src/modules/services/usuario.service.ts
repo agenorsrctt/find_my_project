@@ -17,9 +17,13 @@ export async function criarUsuarioService(dados: UsuarioDto) {
         throw new Error("Dados não enviados, verifique as informações e tente novamente.");
     }
 
+    if(dados.tipo !== "aluno" && dados.tipo !== "responsavel" && dados.tipo !== "visitante"){
+        throw new Error("Tipo inválido, verifique as informações e tente novamente.")
+    }
+
     const camposObrigatorios: (string | number | undefined)[] = [dados.nome, dados.email, dados.senha, dados.tipo];
 
-    if (dados.tipo !== "visitante" && dados.tipo !== "superAdmin") {
+    if (dados.tipo !== "visitante") {
         camposObrigatorios.push(dados.identificacao, dados.instituicao_id, dados.curso);
     };
 
@@ -133,6 +137,12 @@ export async function alterarUsuarioService(dados: AlterarUsuarioDto, id: number
         if (dados.tipo !== "aluno" && dados.tipo !== "responsavel" && dados.tipo !== "visitante") {
             throw new Error("Tipo precisa ser igual ao padrao do sistema, verifique as informações e tente novamente.");
         };
+
+        if(usuario.tipo === "visitante" && usuario.instituicao_id === null && usuario.identificacao === null && usuario.curso === null){
+            if(dados.tipo !== "visitante"){
+                throw new Error("É nescessário identificar a instituição de ensino para alterar o tipo.")
+            }
+        }
     };
 
     if (dados.instituicao_id !== undefined) {
