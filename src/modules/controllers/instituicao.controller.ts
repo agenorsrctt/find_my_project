@@ -8,7 +8,6 @@ import {
 } from "../services/instituicao.service.js";
 
 import type { Request, Response } from "express";
-import { buscarAlunoService } from "../services/usuario.service.js";
 
 export async function criarInstituicaoController(req: Request, res: Response) {
     try {
@@ -47,7 +46,7 @@ export async function alterarInstituicaoController(req: Request, res: Response) 
         const {nome} = req.body;
         const id = Number(req.params.id);
         await alterarInstituicaoService(nome, id);
-        const instituicaoAlterada = await buscarAlunoService(id);
+        const instituicaoAlterada = await buscarInstituicaoService(id);
 
         res.status(200).json({
             mensagem: "Nome da instituição alterado com sucesso!",
