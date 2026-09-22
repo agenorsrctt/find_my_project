@@ -50,7 +50,6 @@ export async function alterarInstituicaoController(req: Request, res: Response) 
 
         res.status(200).json({
             mensagem: "Nome da instituição alterado com sucesso!",
-            id: "instituição alterada com sucesso!",
             dados: instituicaoAlterada
         })
 

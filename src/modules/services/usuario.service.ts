@@ -1,6 +1,7 @@
 import { gerarHashSenha } from "../../middleware/bcrypt.middleware.js";
 import type { AlterarUsuarioDto, UsuarioDto } from "../dtos/usuarios.dto.js";
 import { buscarInstituicaoRepository } from "../repositories/instituicao.repository.js";
+import { buscarProjetoPorResponsavelRepository } from "../repositories/projetos.repository.js";
 import {
     criarUsuarioRepository,
     alterarUsuarioRepository,
@@ -10,10 +11,15 @@ import {
     listarAlunoRepository,
     buscarAlunoRepository
 } from "../repositories/usuario.repository.js"
+import { buscarProjetoService } from "./projeto.service.js";
 
 export async function criarUsuarioService(dados: UsuarioDto) {
     if (!dados) {
         throw new Error("Dados não preenchido, verificar e tentar novamente.")
+    }
+
+    if (dados.tipo === "superAdmin") {
+        throw new Error("Tipo de usuário não permitido para cadastro.");
     }
 
     const senhaHash = await gerarHashSenha(dados.senha);
@@ -43,6 +49,10 @@ export async function alterarUsuarioService(dados: AlterarUsuarioDto, id: number
         dados.senha = senhaHash;
     }
 
+    if (dados.tipo === "superAdmin") {
+        throw new Error("Não é permitido alterar o usuário para superAdmin.");
+    }
+
     return await alterarUsuarioRepository(dados, id);
 };
 
@@ -55,6 +65,14 @@ export async function deletarUsuarioService(id: number) {
 
     if (!usuario) {
         throw new Error("Usuario não localizado, verifique as informações e tente novamente.")
+    }
+
+    const projeto = await buscarProjetoPorResponsavelRepository(id);
+
+    if (projeto) {
+        throw new Error(
+            "Usuário possui projeto vinculado e não pode ser deletado."
+        );
     }
 
     return await deletarUsuarioRepository(id);

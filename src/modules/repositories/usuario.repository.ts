@@ -133,3 +133,16 @@ export async function buscarEmailAlunoRepository(email: string) {
     const [resultado] = await db.execute<RowDataPacket[]>(sql, [email]);
     return resultado[0];
 }
+
+export async function buscarUsuarioPorInstituicaoRepository(instituicao_id: number) {
+    const sql = `
+        select id
+        from usuarios
+        where instituicao_id = ?
+        limit 1
+    `;
+
+    const [resultado] = await db.execute<RowDataPacket[]>(sql, [instituicao_id]);
+
+    return resultado[0];
+}

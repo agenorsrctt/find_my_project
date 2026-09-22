@@ -5,6 +5,8 @@ import {
     buscarInstituicaoRepository,
     listarInstituicaoRepository
 } from "../repositories/instituicao.repository.js"
+import { buscarProjetoPorInstituicaoRepository } from "../repositories/projetos.repository.js";
+import { buscarUsuarioPorInstituicaoRepository } from "../repositories/usuario.repository.js";
 
 
 
@@ -62,6 +64,22 @@ export async function deletarInstituicaoService(id: number) {
 
     if (!instituicao) {
         throw new Error("Instituição não encontada, verifique as informações e tente novamente.")
+    }
+
+    const usuario = await buscarUsuarioPorInstituicaoRepository(id);
+
+    if (usuario) {
+        throw new Error(
+            "Instituição possui usuários vinculados e não pode ser deletada."
+        );
+    }
+
+    const projeto = await buscarProjetoPorInstituicaoRepository(id);
+
+    if (projeto) {
+        throw new Error(
+            "Instituição possui projetos vinculados e não pode ser deletada."
+        );
     }
 
 

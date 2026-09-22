@@ -115,3 +115,29 @@ export async function listarProjetoRepository() {
     const [resultado] = await db.execute<RowDataPacket[]>(sql);
     return resultado
 }
+
+export async function buscarProjetoPorResponsavelRepository(responsavel_id: number) {
+    const sql = `
+        select id
+        from projetos
+        where responsavel_id = ?
+        limit 1
+    `;
+
+    const [resultado] = await db.execute<RowDataPacket[]>(sql, [responsavel_id]);
+
+    return resultado[0];
+}
+
+export async function buscarProjetoPorInstituicaoRepository(instituicao_id: number) {
+    const sql = `
+        select id
+        from projetos
+        where instituicao_id = ?
+        limit 1
+    `;
+
+    const [resultado] = await db.execute<RowDataPacket[]>(sql, [instituicao_id]);
+
+    return resultado[0];
+}
