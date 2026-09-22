@@ -20,7 +20,7 @@ export async function criarUsuarioService(dados: UsuarioDto) {
 
     dados.senha = senhaHash;
 
-    await criarUsuarioRepository(dados);
+    return await criarUsuarioRepository(dados);
 }
 
 export async function alterarUsuarioService(dados: AlterarUsuarioDto, id: number) {
@@ -43,7 +43,7 @@ export async function alterarUsuarioService(dados: AlterarUsuarioDto, id: number
         dados.senha = senhaHash;
     }
 
-    await alterarUsuarioRepository(dados, id);
+    return await alterarUsuarioRepository(dados, id);
 };
 
 export async function deletarUsuarioService(id: number) {

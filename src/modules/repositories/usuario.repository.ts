@@ -60,6 +60,10 @@ export async function alterarUsuarioRepository(dados: AlterarUsuarioDto, id: num
         valores.push(dados.curso);
     }
 
+    if (campos.length === 0) {
+        throw new Error("Nenhum campo enviado para alteração.");
+    }
+
     valores.push(id);
 
     const camposPlaceholders = campos.map(campo => `${campo} = ?`);

@@ -10,13 +10,16 @@ import {
 
 export async function criarInstituicaoService(nome: string) {
 
-    if (nome !== undefined) {
-        if (typeof nome !== "string") {
-            throw new Error("Nome inválido, verifique as informações e tente novamente.")
-        }
-        if (!nome.trim()) {
-            throw new Error("Nome inválido, verifique as informações e tente novamente.")
-        }
+    if (nome === undefined) {
+        throw new Error("Nome inválido, verifique as informações e tente novamente.");
+    }
+
+    if (typeof nome !== "string") {
+        throw new Error("Nome inválido, verifique as informações e tente novamente.");
+    }
+
+    if (!nome.trim()) {
+        throw new Error("Nome inválido, verifique as informações e tente novamente.");
     }
 
     nome = nome.toUpperCase();
@@ -26,13 +29,16 @@ export async function criarInstituicaoService(nome: string) {
 
 export async function alterarInstituicaoService(nome: string, id: number) {
 
-    if (nome !== undefined) {
-        if (typeof nome !== "string") {
-            throw new Error("Nome inválido, verifique as informações e tente novamente.")
-        }
-        if (!nome.trim()) {
-            throw new Error("Nome inválido, verifique as informações e tente novamente.")
-        }
+    if (nome === undefined) {
+        throw new Error("Nome inválido, verifique as informações e tente novamente.");
+    }
+
+    if (typeof nome !== "string") {
+        throw new Error("Nome inválido, verifique as informações e tente novamente.");
+    }
+
+    if (!nome.trim()) {
+        throw new Error("Nome inválido, verifique as informações e tente novamente.");
     }
 
     const instituicao = await buscarInstituicaoRepository(id);

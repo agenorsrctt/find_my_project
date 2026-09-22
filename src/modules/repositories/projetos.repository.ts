@@ -2,7 +2,7 @@ import { db } from "../../database/connection.js";
 import { type ResultSetHeader, type RowDataPacket } from "mysql2";
 import type { AltearProjetosDTO, ProjetosDTO } from "../dtos/projetos.dto.js";
 
-export async function criarProjetoRepository(dados: ProjetosDTO){
+export async function criarProjetoRepository(dados: ProjetosDTO) {
     const campos = "responsavel_id, instituicao_id, nome, integrantes, descricao, tecnologias, gitHub_url, img_capa_url"
     const placeholders = ("?,?,?,?,?,?,?,?")
     const valores = [
@@ -17,13 +17,13 @@ export async function criarProjetoRepository(dados: ProjetosDTO){
     ]
 
     const sql = `insert into projetos (${campos}) values (${placeholders})`;
-    
+
     const [resultado] = await db.execute<ResultSetHeader>(sql, valores);
     return resultado.insertId;
 };
 
 export async function alterarProjetoRepository(dados: AltearProjetosDTO, id: number) {
-    
+
     const campos: string[] = [];
     const valores: (string | number)[] = [];
 
@@ -67,6 +67,10 @@ export async function alterarProjetoRepository(dados: AltearProjetosDTO, id: num
         valores.push(dados.img_capa_url);
     }
 
+    if (campos.length === 0) {
+        throw new Error("Nenhum campo enviado para alteração.");
+    }
+
     valores.push(id);
 
     const camposPlaceholders = campos.map(campo => `${campo} = ?`);
@@ -78,7 +82,7 @@ export async function alterarProjetoRepository(dados: AltearProjetosDTO, id: num
 
 export async function deletarProjetoRepository(id: number) {
     const sql = "delete from projetos where id = ?";
-    
+
     const [resultado] = await db.execute<ResultSetHeader>(sql, [id]);
     return resultado.affectedRows;
 }
@@ -93,7 +97,7 @@ export async function buscarProjetoRepository(id: number) {
     on i.id = p.instituicao_id
     where p.id = ?
     `;
-    
+
     const [resultado] = await db.execute<RowDataPacket[]>(sql, [id]);
     return resultado[0];
 }
@@ -107,7 +111,7 @@ export async function listarProjetoRepository() {
     inner join instituicoes i
     on i.id = p.instituicao_id
     `;
-    
+
     const [resultado] = await db.execute<RowDataPacket[]>(sql);
     return resultado
 }
