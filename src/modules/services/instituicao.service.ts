@@ -8,10 +8,7 @@ import {
 import { buscarProjetoPorInstituicaoRepository } from "../repositories/projetos.repository.js";
 import { buscarUsuarioPorInstituicaoRepository } from "../repositories/usuario.repository.js";
 
-
-
 export async function criarInstituicaoService(nome: string) {
-
     if (nome === undefined) {
         throw new Error("Nome inválido, verifique as informações e tente novamente.");
     }
@@ -23,13 +20,15 @@ export async function criarInstituicaoService(nome: string) {
     if (!nome.trim()) {
         throw new Error("Nome inválido, verifique as informações e tente novamente.");
     }
-
+    
     nome = nome.toUpperCase();
-
     return await criarInstituicaoRepository(nome);
 }
 
 export async function alterarInstituicaoService(nome: string, id: number) {
+    if (!Number.isInteger(id) || id <= 0) {
+        throw new Error("Instituição não encontrada, verifique as informações e tente novamente.")
+    }
 
     if (nome === undefined) {
         throw new Error("Nome inválido, verifique as informações e tente novamente.");
@@ -44,30 +43,23 @@ export async function alterarInstituicaoService(nome: string, id: number) {
     }
 
     const instituicao = await buscarInstituicaoRepository(id);
-
     if (!instituicao) {
         throw new Error("Instituição não encontada, verifique as informações e tente novamente.")
     }
-
-
     return await alterarInstituicaoRepository(nome, id);
-
 }
 
 export async function deletarInstituicaoService(id: number) {
-
-    if (id <= 0) {
+    if (!Number.isInteger(id) || id <= 0) {
         throw new Error("Instituição não encontrada, verifique as informações e tente novamente.")
     }
 
     const instituicao = await buscarInstituicaoRepository(id);
-
     if (!instituicao) {
         throw new Error("Instituição não encontada, verifique as informações e tente novamente.")
     }
 
     const usuario = await buscarUsuarioPorInstituicaoRepository(id);
-
     if (usuario) {
         throw new Error(
             "Instituição possui usuários vinculados e não pode ser deletada."
@@ -75,42 +67,30 @@ export async function deletarInstituicaoService(id: number) {
     }
 
     const projeto = await buscarProjetoPorInstituicaoRepository(id);
-
     if (projeto) {
         throw new Error(
             "Instituição possui projetos vinculados e não pode ser deletada."
         );
     }
-
-
     return await deletarInstituicaoRepository(id);
-
 }
 
 export async function buscarInstituicaoService(id: number) {
-
-    if (id <= 0) {
+    if (!Number.isInteger(id) || id <= 0) {
         throw new Error("Instituição não encontrada, verifique as informações e tente novamente.")
     }
 
     const instituicao = await buscarInstituicaoRepository(id);
-
     if (!instituicao) {
         throw new Error("Instituição não encontada, verifique as informações e tente novamente.")
     }
-
     return instituicao;
-
 }
 
 export async function listarInstituicaoService() {
-
     const instituicoes = await listarInstituicaoRepository();
-
     if (instituicoes.length <= 0) {
         throw new Error("Nenhuma instituição encontrada até o momento, verifique as informações e tente novamente.")
     }
-
     return instituicoes;
-
 }

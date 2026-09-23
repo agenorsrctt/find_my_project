@@ -74,7 +74,7 @@ export async function deletarInstituicaoController(req: Request, res: Response) 
     try {
 
         const id = Number(req.params.id);
-        const dados = await buscarInstituicaoRepository(id);
+        const dados = await buscarInstituicaoService(id);
         await deletarInstituicaoService(id);
 
         res.status(200).json({

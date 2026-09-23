@@ -108,7 +108,7 @@ export async function listarAlunoRepository() {
         i.id as instituicao_id, i.nome as instituicoes
         from usuarios u
         inner join instituicoes i
-        on u.instituicao_id = i.id
+        on u.instituicao_id = i.id where u.tipo = 'aluno'
     `;
     const [resultado] = await db.execute<RowDataPacket[]>(sql);
     return resultado
@@ -121,7 +121,7 @@ export async function buscarAlunoRepository(id: number) {
         from usuarios u
         inner join instituicoes i
         on u.instituicao_id = i.id
-        where u.id = ?
+        where u.id = ? AND u.tipo = 'aluno'
     `;
 
     const [resultado] = await db.execute<RowDataPacket[]>(sql, [id]);
