@@ -6,7 +6,7 @@ import {
     listarProjetoRepository
 } from "../repositories/projetos.repository.js";
 import type { ProjetosDTO, AltearProjetosDTO } from "../dtos/projetos.dto.js";
-import { buscarAlunoRepository } from "../repositories/usuario.repository.js";
+import { buscarAlunoRepository, buscarUsuarioRepository } from "../repositories/usuario.repository.js";
 
 
 export async function criarProjetoService(dados: ProjetosDTO) {
@@ -18,7 +18,7 @@ export async function criarProjetoService(dados: ProjetosDTO) {
         throw new Error("Usuario não identificado.")
     }
 
-    const responsavel = await buscarAlunoRepository(dados.responsavel_id);
+    const responsavel = await buscarUsuarioRepository(dados.responsavel_id);
 
     if(!responsavel){
         throw new Error("Aluno não encontado.")
@@ -54,25 +54,19 @@ export async function criarProjetoService(dados: ProjetosDTO) {
 }
 
 export async function alterarProjetoService(dados: AltearProjetosDTO, id: number) {
-
     if (!Number.isInteger(id) || id <= 0) {
         throw new Error("Projeto não encontrado, verifique as informações e tente novamente.");
     }
-
     const projeto = await buscarProjetoRepository(id);
-
     if (!projeto) {
         throw new Error("Projeto não encontrado, verifique as informações e tente novamente.")
     }
-
     if (!dados) {
         throw new Error("Dados do projeto não enviados, verifique as informações e tente novamente.");
     };
-
     if (dados.responsavel_id !== projeto.responsavel_id) {
         throw new Error("Você não tem autorização sobre este projeto, verifique as informações e tente novamente.")
     }
-
     const campos = {
         descricao: dados.descricao,
         gitHub_url: dados.gitHub_url,
@@ -83,7 +77,6 @@ export async function alterarProjetoService(dados: AltearProjetosDTO, id: number
         responsavel_id: dados.responsavel_id,
         tecnologias: dados.tecnologias
     };
-
     for (const [chave, valor] of Object.entries(campos)) {
 
         if (valor !== undefined) {
@@ -96,9 +89,7 @@ export async function alterarProjetoService(dados: AltearProjetosDTO, id: number
                 throw new Error(`${chave} inválido, verifique as informações e tente novamente.`);
             }
         }
-
     };
-
     return await alterarProjetoRepository(dados, id);
 }
 
@@ -107,27 +98,20 @@ export async function deletarProjetoService(id: number, responsavel_id: number) 
     if (!Number.isInteger(id) || id <= 0) {
         throw new Error("Projeto não encontrado, verifique as informações e tente novamente.");
     }
-
     if (!Number.isInteger(responsavel_id) || responsavel_id <= 0) {
         throw new Error("Usuario não encontrado, verifique as informações e tente novamente.");
     }
-
-    const aluno = await buscarAlunoRepository(responsavel_id);
-
+    const aluno = await buscarUsuarioRepository(responsavel_id);
     if (!aluno) {
         throw new Error("Usuario autenticado não encontrado, verifique as informações e tente novamente.");
     }
-
     const projeto = await buscarProjetoRepository(id);
-
     if (!projeto) {
         throw new Error("Projeto não encontrado, verifique as informações e tente novamente.")
     }
-
     if (projeto.responsavel_id !== responsavel_id) {
         throw new Error("Você não tem autorização sobre este projeto, verifique as informações e tente novamente.")
     }
-
     return await deletarProjetoRepository(id);
 }
 
